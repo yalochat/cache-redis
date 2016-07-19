@@ -1,0 +1,36 @@
+{
+  "name": "cache-redis",
+  "version": "0.1.0",
+  "description": "Package used to manage cache with Redis and Catbox for HapiJS",
+  "main": "index.js",
+  "scripts": {
+    "test": "node_modules/lab/bin/lab -a code -t 100 -v tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yalochat/cache-redis.git"
+  },
+  "keywords": [
+    "cache",
+    "redis",
+    "catbox",
+    "hapijs"
+  ],
+  "author": "Yalo <eng@yalochat.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yalochat/cache-redis/issues"
+  },
+  "homepage": "https://github.com/yalochat/cache-redis#readme",
+  "dependencies": {
+    "bluebird": "^3.4.1",
+    "bucker": "^1.1.1",
+    "catbox": "^7.1.1",
+    "catbox-redis": "^2.0.2",
+    "hoek": "^4.0.1"
+  },
+  "devDependencies": {
+    "code": "^3.0.1",
+    "lab": "^10.9.0"
+  }
+}
