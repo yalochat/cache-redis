@@ -21,23 +21,28 @@ const internals = {
       password: '',
       database: 'cache'
     }
+  },
+  testKey: {
+    key: 'ABC',
+    invalidKey: 'ABD',
+    segment: 'tests',
+    value: 123
   }
 }
 
 describe('Cache package', () => {
 
-    it('start client of cache', (done) => {
+    it('start client of cache', done => {
       Cache.start()
         .then(cache => {
           expect(cache.set).to.be.exists();
           expect(cache.get).to.be.exists();
-          expect(cache.client).to.be.exists();
           expect(cache.start).to.be.exists();
           done();
         });
     });
 
-    it('error when trying to init the client', (done) => {
+    it('error when trying to init the client', done => {
       const start = Catbox.Client.prototype.start;
       Catbox.Client.prototype.start = (callback) => {
         callback(new Error());
@@ -51,13 +56,10 @@ describe('Cache package', () => {
         });
     });
 
-    it('store a new value', (done) => {
+    it('store a new value', done => {
       Cache.start()
         .then(cache => {
-          let key = { id: 'ABC', segment: 'tests' };
-          let value = 123;
-
-          cache.set(key, value)
+          cache.set(internals.testKey.segment, internals.testKey.key, internals.testKey.value)
             .then(success => {
               expect(success).to.be.true();
               done();
@@ -65,7 +67,7 @@ describe('Cache package', () => {
         });
     });
 
-    it('error when trying to set a key', (done) => {
+    it('error when trying to set a key', done => {
       const set = Catbox.Client.prototype.set;
       Catbox.Client.prototype.set = (key, value, ttl, callback) => {
           return callback(new Error('fail'));
@@ -73,10 +75,8 @@ describe('Cache package', () => {
 
       Cache.start()
         .then(cache => {
-          let key = { id: 'ABC', segment: 'tests' };
-          let value = 123;
 
-          cache.set(key, value)
+          cache.set(internals.testKey.segment, internals.testKey.key, internals.testKey.value)
             .catch(err => {
               expect(err).to.be.instanceof(Error);
               Catbox.Client.prototype.set = set;
@@ -85,32 +85,28 @@ describe('Cache package', () => {
         });
     });
 
-    it('store and get a key', (done) => {
+    it('store and get a key', done => {
 
       Cache.start()
         .then(cache => {
-          let key = { id: 'ABC', segment: 'tests' };
-          let value = 123;
 
-          cache.set(key, value)
+          cache.set(internals.testKey.segment, internals.testKey.key, internals.testKey.value)
             .then(success => {
               expect(success).to.be.true();
 
-              cache.get(key)
-                .then(value => {
-                  expect(value).to.equals(123);
-                  done();
-                });
+              return cache.get(internals.testKey.segment, internals.testKey.key)
+            })
+            .then(value => {
+              expect(value).to.equals(123);
+              done();
             });
         });
     });
 
-    it('get an invalid key', (done) => {
-      const key = { id: 'ABD', segment: 'tests' }
-
+    it('get an invalid key', done => {
       Cache.start()
         .then(cache => {
-          cache.get(key)
+          cache.get(internals.testKey.segment, internals.testKey.invalidKey)
             .catch(value => {
               expect(value).to.be.null();
               done();
@@ -118,7 +114,7 @@ describe('Cache package', () => {
         });
     });
 
-    it('error when trying to get a key', (done) => {
+    it('error when trying to get a key', done => {
       const get = Catbox.Client.prototype.get;
       Catbox.Client.prototype.get = (key, callback) => {
           return callback(new Error('fail'), null);
@@ -126,19 +122,52 @@ describe('Cache package', () => {
 
       Cache.start()
         .then(cache => {
-          const key = { id: 'ABC', segment: 'tests' }
+          cache.get(internals.testKey.segment, internals.testKey.key)
+            .catch(error => {
 
-          cache.get(key)
-            .catch((value) => {
-
-              expect(value).to.be.instanceof(Error);
+              expect(error).to.be.instanceof(Error);
               Catbox.Client.prototype.get = get;
               done();
           });
         });
     });
 
-    it('require module with default options', (done) => {
+    it('delete a key', done => {
+      Cache.start()
+        .then(cache => {
+          cache.set(internals.testKey.segment, internals.testKey.key, internals.testKey.value)
+            .then(success => {
+              expect(success).to.be.true();
+
+              return cache.delete(internals.testKey.segment, internals.testKey.key)
+            })
+            .then(success => {
+              expect(success).to.be.true();
+
+              done();
+            });
+        });
+    });
+
+    it('error when trying to delete a key', done => {
+      const drop = Catbox.Client.prototype.drop;
+      Catbox.Client.prototype.drop = (key, callback) => {
+          return callback(new Error('fail'), null);
+      }
+
+      Cache.start()
+        .then(cache => {
+          cache.delete(internals.testKey.segment, internals.testKey.key)
+            .catch(error => {
+
+              expect(error).to.be.instanceof(Error);
+              Catbox.Client.prototype.drop = drop;
+              done();
+            })
+        })
+    });
+
+    it('require module with default options', done => {
       const CacheDefault = require('../lib/index')();
 
       expect(CacheDefault.opts).to.equals(internals.defaultOptions);
