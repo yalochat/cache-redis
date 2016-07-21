@@ -1,8 +1,8 @@
 {
   "name": "cache-redis",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Package used to manage cache with Redis and Catbox for HapiJS",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
     "test": "node_modules/lab/bin/lab -a code -t 100 -v tests"
   },
