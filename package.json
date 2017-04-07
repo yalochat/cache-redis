@@ -1,5 +1,5 @@
 {
-  "name": "cache-redis",
+  "name": "yalo-cache-redis",
   "version": "0.1.6",
   "description": "Package used to manage cache with Redis and Catbox for HapiJS",
   "main": "lib/index.js",
