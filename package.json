@@ -1,10 +1,11 @@
 {
-  "name": "cache-redis",
-  "version": "0.1.6",
+  "name": "yalo-cache-redis",
+  "version": "1.0.0",
   "description": "Package used to manage cache with Redis and Catbox for HapiJS",
   "main": "lib/index.js",
   "scripts": {
-    "test": "node_modules/lab/bin/lab -a code -t 100 -v tests"
+    "test": "node_modules/lab/bin/lab -a code -t 100 -v test",
+    "gulp:test": "gulp test"
   },
   "repository": {
     "type": "git",
@@ -31,6 +32,12 @@
   },
   "devDependencies": {
     "code": "^3.0.1",
-    "lab": "^10.9.0"
+    "dotenv": "^4.0.0",
+    "gulp": "^3.9.1",
+    "gulp-nodemon": "^2.2.1",
+    "gulp-watch": "^4.3.11",
+    "lab": "^10.9.0",
+    "minimist": "^1.2.0",
+    "require-dir": "^0.3.1"
   }
 }
