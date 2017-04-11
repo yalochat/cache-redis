@@ -29,7 +29,7 @@ const internals = {
   }
 }
 
-describe('Cache package, focus', () => {
+describe('Cache package', () => {
   describe('initializing server', () => {
     afterEach((done) => {
       Cache.stop()
@@ -61,12 +61,12 @@ describe('Cache package, focus', () => {
     })
 
     it('should able to validate connection to cache server', (done) => {
-      try {
-        Cache.validateConnection()
-      } catch (e) {
-        expect(e).to.be.an.error()
-        done()
-      }
+      Cache.validateConnection()
+        .catch((e) => {
+          expect(e).to.be.an.error()
+          expect(e.message).to.equals('Start a new connection is necessary')
+          done()
+        })
     })
 
     it('should able to throw an error if client is instanced but not ready', (done) => {
