@@ -1,6 +1,6 @@
 {
   "name": "yalo-cache-redis",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Package used to manage cache with Redis and Catbox for HapiJS",
   "main": "lib/index.js",
   "scripts": {
