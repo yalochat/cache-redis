@@ -193,7 +193,7 @@ describe('Cache package', () => {
       expect(deleted).to.be.true()
     })
 
-    it('focus should able to manage if an exception ocurred when trying to delete a key', async () => {
+    it('should able to manage if an exception ocurred when trying to delete a key', async () => {
       const { drop } = Catbox.Client.prototype
       Catbox.Client.prototype.drop = async () => {
         throw new Error('fail')
